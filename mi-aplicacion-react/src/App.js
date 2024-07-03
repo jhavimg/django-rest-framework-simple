@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 function App() {
     const [projects, setProjects] = useState([]);
 
+    // https://drfsimplecrud-test-vkqn.onrender.com/api/projects/
+
     useEffect(() => {
-        fetch('https://drfsimplecrud-test-vkqn.onrender.com/api/projects/')
+        fetch('http://localhost:8000/api/projects/')
             .then(response => response.json())
             .then(setProjects)
             .catch(error => console.error('Error fetching data:', error));
