@@ -1,44 +1,33 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-    const [data, setData] = useState(null); // Estado para almacenar los datos recibidos
-    const [isLoading, setIsLoading] = useState(true); // Estado para controlar la carga
-    const [error, setError] = useState(null); // Estado para manejar errores
+    const [projects, setProjects] = useState([]);
 
-    // useEffect se ejecutará una vez cuando el componente se monte
     useEffect(() => {
-        const url = 'https://drfsimplecrud-test-vkqn.onrender.com/api/projects/'; // URL de tu API
-        fetch(url)
-            .then(response => {
-                // Verificar si la respuesta es exitosa
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json(); // Parsear la respuesta como JSON
-            })
-            .then(data => {
-                setData(data); // Guardar los datos en el estado
-                setIsLoading(false); // Actualizar el estado de carga
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setError(error.message); // Guardar el mensaje de error en el estado
-                setIsLoading(false);
-            });
-    }, []); // El array vacío asegura que el efecto se ejecute solo una vez
-
-    if (isLoading) {
-        return <div>Loading...</div>; // Mostrar un mensaje de carga
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>; // Mostrar un mensaje de error
-    }
+        fetch('https://drfsimplecrud-test-vkqn.onrender.com/api/projects/')
+            .then(response => response.json())
+            .then(setProjects)
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
 
     return (
         <div>
             <h1>Proyectos desde la API</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            {projects.length > 0 ? (
+                <ul>
+                    {projects.map(project => (
+                        <li key={project.id}>
+                            <h2>{project.title}</h2>
+                            <p>{project.description}</p>
+                            <p>Technología utilizada: {project.technology}</p>
+                            <p>Creado el: {new Date(project.created_at).toLocaleDateString()}</p>
+                            {project.image && <img src={project.image} alt={`Imagen de ${project.title}`} style={{ width: '100px' }} />}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No hay proyectos para mostrar.</p>
+            )}
         </div>
     );
 }
