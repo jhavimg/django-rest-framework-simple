@@ -4,5 +4,5 @@ from .models import Project
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'technology', 'created_at')
+        fields = ('id', 'title', 'description', 'technology', 'created_at', 'image')
         read_only_fields = ('created_at', )
